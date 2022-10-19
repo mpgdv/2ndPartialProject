@@ -10,7 +10,6 @@
 using namespace std;
 
 
-
 class Library{
 
     public:
@@ -138,16 +137,55 @@ void Library::librarian()
 }
 
 //Moverle para que dependa del tipo de libro
-void Library::addBook(){
-    
-    string title,author;
+//Que la llave sea el ISBN 
+void Library::addBook()
+{
+  /*  string title,author;
     int year;
     cout<<"Title: "; cin>>title;
     cout<<"Author: ";cin>>author;
     cout<<"Publication year: "; cin>>year;
     library[title] = Book(title,author,year);
 
-    librarian();
+    librarian();*/
+
+    string title,_author,_genre,_subject, _topic,_artist;
+    int year,volume;
+
+        int i;
+        cout<<"\n\t\t>>Please Choose One Option:\n";
+        cout<<"\n\t\t1.Add Novel\n\n\t\t2.Add Textbook\n\n\t\t3.Add Comic\n";
+        cout<<"\n\t\tEnter your choice : ";
+        cin>>i;
+        switch(i)
+        {   
+            cout<<"Title: "; cin>>title;
+            cout<<"Author: ";cin>>_author;
+            cout<<"Publication year: "; cin>>year;
+            //Novel
+            case 1:
+                cout<<"Genre: "; cin>>_genre;
+                library[title] = Novel(title,_author,year,_genre);
+                     break;
+            //Textbook
+            case 2:
+                cout<<"Subject: ";cin>>_subject;
+                cout<<"Topic: ";cin>>_topic;
+                library[title] = TextBook(title,_author,year,_subject,_topic);
+                     break;
+            //Comic
+            case 3:
+                cout<<"Volume: ";cin>>volume;
+                cout<<"Artisti: ";cin>>_artist;
+                library[title] = Comic(title,_author,year,volume,_artist);
+                     break;
+            default:cout<<"\n\t\tPlease enter correct option :(";
+            getch();
+            system("cls");
+            librarian();
+        }
+
+
 
 }
 
