@@ -61,12 +61,12 @@ class TextBook: public Book{
 
 class Comic: public Book{ 
     private:
-        string subject;
-        string topic;
+        int volume; 
+        string artist;
     public:
-        Comic():subject(""),topic(""){};
-        Comic(string title,string author,int year_publication,string _subject,string _topic):Book(title,author,year_publication){
-            subject = _subject;
-            topic = _topic;
+        Comic():volume(0),artist(""){};
+        Comic(string title,string author,int year_publication,int _volume,string _artist):Book(title,author,year_publication){
+            volume = _volume;
+            artist = _artist;
         } 
 };
