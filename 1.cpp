@@ -137,55 +137,62 @@ void Library::librarian()
 }
 
 //Moverle para que dependa del tipo de libro
-//Que la llave sea el ISBN 
-void Library::addBook()
-{
-  /*  string title,author;
-    int year;
-    cout<<"Title: "; cin>>title;
-    cout<<"Author: ";cin>>author;
-    cout<<"Publication year: "; cin>>year;
-    library[title] = Book(title,author,year);
+//Que la llave sea el ISBN
 
-    librarian();*/
-
-    string title,_author,_genre,_subject, _topic,_artist;
-    int year,volume;
+void Library::addBook(){
+    
+        string title,_author,_genre,_subject, _topic,_artist;
+        int year,volume;
 
         int i;
         cout<<"\n\t\t>>Please Choose One Option:\n";
-        cout<<"\n\t\t1.Add Novel\n\n\t\t2.Add Textbook\n\n\t\t3.Add Comic\n";
+        cout<<"\n\t\t1.Add Novel\n\n\t\t2.Add Textbook\n\n\t\t3.Add Comic\n\n\t\t4.Return\n";
         cout<<"\n\t\tEnter your choice : ";
         cin>>i;
+
         switch(i)
         {   
-            cout<<"Title: "; cin>>title;
-            cout<<"Author: ";cin>>_author;
-            cout<<"Publication year: "; cin>>year;
+            
             //Novel
             case 1:
+                cout<<"Title: "; cin>>title;
+                cout<<"Author: ";cin>>_author;
+                cout<<"Publication year: "; cin>>year;
                 cout<<"Genre: "; cin>>_genre;
                 library[title] = Novel(title,_author,year,_genre);
                      break;
             //Textbook
             case 2:
+                cout<<"Title: "; cin>>title;
+                cout<<"Author: ";cin>>_author;
+                cout<<"Publication year: "; cin>>year;
                 cout<<"Subject: ";cin>>_subject;
                 cout<<"Topic: ";cin>>_topic;
                 library[title] = TextBook(title,_author,year,_subject,_topic);
                      break;
             //Comic
             case 3:
+                cout<<"Title: "; cin>>title;
+                cout<<"Author: ";cin>>_author;
+                cout<<"Publication year: "; cin>>year;
                 cout<<"Volume: ";cin>>volume;
                 cout<<"Artisti: ";cin>>_artist;
                 library[title] = Comic(title,_author,year,volume,_artist);
                      break;
-            default:cout<<"\n\t\tPlease enter correct option :(";
-            getch();
-            system("cls");
-            librarian();
+            case 4:
+                librarian();
+                break;
+            default:
+            cout<<"\n\t\tPlease enter correct option :(";
+                getch();
+                system("cls");
+                addBook();
+           
         }
-
-
+        cout<<"\n\t\tPress any key to continue.....";
+        getch();
+        system("cls");
+        librarian();
 
 }
 
