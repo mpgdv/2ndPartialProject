@@ -1,8 +1,8 @@
 //Clase libros
 
-#include<iostream>
-#include<string>
-
+//#include<iostream>
+//#include<string>
+#include<bits/stdc++.h>
 //Map -> trabaja con pares -> llave, valor
 
 using namespace std;
@@ -32,7 +32,6 @@ class Book{
         void print_book(){
             cout<<"\""<<title<<"\" by "<<author<<endl;
         }
-
 
 };
 class Novel: public Book{ 
