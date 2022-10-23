@@ -30,6 +30,7 @@ class Library{
     void booklist(int);
     void see();
     void borrowBook();
+    void deleteFiles(); //When the program closes
 
 };
 
@@ -50,14 +51,14 @@ void Library::get()
             librarian();
 
         else if(i==3)
-            exit(0);
+            deleteFiles();
         else
         {
             cout<<"\n\t\tPlease enter correct option :(";
             getch();
             system("CLS");
             get();
-        }
+        } 
 }
 void Library::student()
 {
@@ -67,24 +68,7 @@ void Library::student()
         cout<<"\n\t\t1.View BookList\n\n\t\t2. Borrow a Book\n\n\t\t3.Go to main menu\n\n\t\t4.Close Program\n";
         cout<<"\n\t\tEnter your choice : ";
         cin>>i;
-            /*if(i==1)
-                booklist(1);
-            else if(i==2)
-                see(1);
-            else if(i==3)
-            {
-                system("cls");
-                get();
-            }
-            else if(i==4)
-                exit(0);
-            else
-            {
-                cout<<"\n\t\tPlease enter correct option :(";
-                getch();
-                system("cls");
-                student();
-            }*/
+            
 
          
 
@@ -97,7 +81,7 @@ void Library::student()
             case 3:system("cls");
                      get();
                      break;
-            case 4:exit(0);
+            case 4:deleteFiles();
             default:cout<<"\n\t\tPlease enter correct option :(";
             getch();
             system("cls");
@@ -112,7 +96,7 @@ void Library::booklist(int i)
       for(map<string,Book>::iterator it = library.begin();it!=library.end();it++){
 
         pair<string,Book> book = *it;
-       // cout<<book.first<<":"<<endl; //la llave
+       
         book.second.print_book(); //Se usa el el metodo de la clase persona, ya que es un objeto
     }
                 cout<<"\n\t\tPress any key to continue.....";
@@ -128,9 +112,7 @@ void Library::see(){ //To see a book register
     cout<<"\n\t\t Search: Press any key to continue.....";
     getch();
     system("cls");
-   /* if(x==1)
-    student();
-    else*/
+   
     librarian();
 }
 void Library::librarian()
@@ -154,7 +136,7 @@ void Library::librarian()
             case 5:system("cls");
                      get();
                      break;
-            case 6:exit(0);
+            case 6:deleteFiles();
             default:cout<<"\n\t\tPlease enter correct option :(";
             getch();
             system("cls");
@@ -253,14 +235,13 @@ void Library::addBook(){
                 // if it's not at the library
                     cout<<"Author: ";
                     getline(cin,author);
+                    cout<<"Artist: ";
+                    getline(cin,artist);
                     cout<<"Publication year: "; 
                     cin>>year;
-                    getline(cin,s);
                     cout<<"Volume: ";
                     cin>>volume;
-                    getline(cin,s);
-                    cout<<"Artisti: ";
-                    getline(cin,artist);
+                    
 
                     library[key] = Comic(title,author,year,volume,artist); 
                 }   
@@ -325,23 +306,37 @@ void Library::borrowBook(){
      cout<<"We don't own that book.";  
     }   
     else {  
-        // found  
-        cout << "Book found";  
+        //If it's found -> see if it's availabe for loanment
+        if(library[title].getLoanState())
+        {
+            cout<<"The book it's not available at the moment"<<endl;
+            borrowBook();
+        }  
+        else{
+            cout<<"The book is available for loan"<<endl;
+        }
+        
     }  
-
-    /*if(!library.erase(title))
-    {
-        cout<<"We don't have that book at the library"<<endl;
-    }
-    else{
-        cout<<"It's been deleted"<<endl;
-    }*/
 
     cout<<"\n\t\tPress any key to continue.....";
         getch();
         system("cls");
         student();
 }
+void Library::deleteFiles()
+{
+    int in;
+    string name;
+    
+    for(map<string,Book>::iterator it = library.begin();it!=library.end();it++){
+
+        pair<string,Book> book = *it; 
+        name = book.second.getTitle();
+        in = remove(name.c_str());  //const char[]
+    }
+    exit(0);
+}
+
 int main()
 {
     Library obj;
