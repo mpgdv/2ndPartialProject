@@ -27,9 +27,11 @@ class Library{
     void deleteBook();
     void student();
     void librarian();
+    void booksAvailable();
     void booklist(int);
-    void see();
+    void seeRegistration();
     void borrowBook();
+    void returnBook();
     void deleteFiles(); //When the program closes
 
 };
@@ -65,7 +67,7 @@ void Library::student()
     int i;
         cout<<"\n\t************ WELCOME STUDENT ************\n";
         cout<<"\n\t\t>>Please Choose One Option:\n";
-        cout<<"\n\t\t1.View BookList\n\n\t\t2. Borrow a Book\n\n\t\t3.Go to main menu\n\n\t\t4.Close Program\n";
+        cout<<"\n\t\t1.View BookList\n\n\t\t2. Books available for loan\n\n\t\t3. Borrow a Book\n\n\t\t4. Return a Book\n\n\t\t5.Go to main menu\n\n\t\t6.Close Program\n";
         cout<<"\n\t\tEnter your choice : ";
         cin>>i;
             
@@ -76,22 +78,58 @@ void Library::student()
         {
             case 1:booklist(1);
                      break;
-            case 2:borrowBook(); //Change to borrow
+            case 2:booksAvailable();
                      break;
-            case 3:system("cls");
+            case 3:borrowBook(); //Change to borrow
+                     break;
+            case 4:returnBook();
+                     break;
+            case 5:system("cls");
                      get();
                      break;
-            case 4:deleteFiles();
+            case 6:deleteFiles();
             default:cout<<"\n\t\tPlease enter correct option :(";
             getch();
             system("cls");
             student();
         }
 }
+
+//Books Available at the moment
+void Library::booksAvailable(){
+    
+    int i = 0;
+    for(map<string,Book>::iterator it = library.begin();it!=library.end();it++){
+
+        pair<string,Book> book = *it;
+       
+       if(!book.second.getLoanState())
+       {
+            i++;
+            book.second.print_book(); //Print the books available at the library
+       }
+        
+    }
+
+    if(i == 0)
+    {
+        cout<<"There are no books available at the library, come another time"<<endl;
+    }
+
+    cout<<"\n\t\tPress any key to continue.....";
+    getch();
+    system("cls");
+    student();
+}
+//All the books the library has
 void Library::booklist(int i)
 {
     //just to see the menus
 
+    if(library.empty())
+    {
+        cout<<"There are no books yet at the library"<<endl;
+    }
     //Revisar si le voy a tener q mover a este
       for(map<string,Book>::iterator it = library.begin();it!=library.end();it++){
 
@@ -99,35 +137,71 @@ void Library::booklist(int i)
        
         book.second.print_book(); //Se usa el el metodo de la clase persona, ya que es un objeto
     }
-                cout<<"\n\t\tPress any key to continue.....";
-                getch();
-                system("cls");
-                if(i==1)
-                    student();
-                else
-                    librarian();
+    cout<<"\n\t\tPress any key to continue.....";
+    getch();
+    system("cls");
+    if(i==1)
+        student();
+    else
+        librarian();
 }
-void Library::see(){ //To see a book register
+void Library::seeRegistration(){ //To see a book register
     
+    string title,s;
+    cout<<"Please enter the title of the book"<<endl;
+    getline(cin,s);
+    cout<<"Title: ";
+    getline(cin,title);
+    transform(title.begin(),title.end(),title.begin(),::tolower);
+
+    auto it = library.find(title);  
+
+    if ( it == library.end() ) {  
+    // not found  
+     cout<<"We don't own that book.";  
+    }   
+    else {  
+        ifstream f;
+        string text;
+
+        f.open(library[title].getTitle(),ios::in);
+
+        if(f.fail()) //Para ver si el archivo se creo
+        {
+            cout<<"El archivo no se puede abrir"<<endl;
+        }
+
+        while(!f.eof()) //leer hasta que llegue al fin
+        {
+            getline(f,text); //lee del archivo, se guarda en 
+            cout<<text<<endl;
+        }
+        
+        f.close(); 
+    }  
+
+
     cout<<"\n\t\t Search: Press any key to continue.....";
     getch();
     system("cls");
    
     librarian();
 }
+
+
 void Library::librarian()
 {
     int i;
         cout<<"\n\t************ WELCOME LIBRARIAN ************\n";
         cout<<"\n\t\t>>Please Choose One Option:\n";
-        cout<<"\n\t\t1.View BookList\n\n\t\t2.Search for a Book\n\n\t\t3.Add Book\n\n\t\t4.Delete Book\n\n\t\t5.Go to main menu\n\n\t\t6.Close Program\n";
+        cout<<"\n\t\t1.View BookList\n\n\t\t2.Search for a Book's Registration\n\n\t\t3.Add Book\n\n\t\t4.Delete Book\n\n\t\t5.Go to main menu\n\n\t\t6.Close Program\n";
         cout<<"\n\t\tEnter your choice : ";
         cin>>i;
         switch(i)
         {
             case 1:booklist(2);
                      break;
-            case 2:see(); //This search would be to see a book register
+            case 2:seeRegistration(); //This search would be to see a book register
                      break;
             case 3:addBook();
                      break;
@@ -292,28 +366,97 @@ void Library::deleteBook(){
 }
 void Library::borrowBook(){
     
+    if(library.empty())
+    {
+        cout<<"There are no books available at the library, come another time"<<endl;
+        
+    }
+    else{
+            string title,s;
+            cout<<"Please enter the title of the book to borrow"<<endl;
+            getline(cin,s);
+            cout<<"Title: ";
+            getline(cin,title);
+            transform(title.begin(),title.end(),title.begin(),::tolower);
+
+            auto it = library.find(title);  
+            
+            if ( it == library.end() ) {  
+            // not found  
+            cout<<"We don't own that book.";  
+            }   
+            else 
+            {  
+                //If it's found -> see if it's availabe for loanment
+                if(library[title].getLoanState())
+                {
+                    cout<<"The book it's not available at the moment"<<endl;
+                }  
+                else{
+                    int days;
+                    cout<<"The book is available for loan"<<endl;
+                    cout<<"Enter the number of days you wish to borrow the book: "<<endl;
+                    cin>>days;
+
+                    //Register the loanment on the file
+
+                    fstream f;
+                    f.open(library[title].getTitle(), ios::app);
+                    if (!f)
+                        cout << "No such file found";
+                    else {
+                        f <<endl<< "Lent for "<<days<<" days.";
+                        f.close();
+                    }
+
+
+                    
+                    //Add threads
+                    bool x = true;
+                    library[title].setLoanState(x);
+                }
+        
+            }  
+    }
+    //Ask for how many days
+    
+
+    cout<<"\n\t\tPress any key to continue.....";
+        getch();
+        system("cls");
+        student();
+}
+
+void Library::returnBook(){
+    //If it's not the limit yet -> Returned on time
+    //If it's past the limit day -> not returned on time
+    
     string title,s;
-    cout<<"Please enter the title of the book to borrow"<<endl;
+    bool x;
+    cout<<"Please enter the title of the book to return"<<endl;
     getline(cin,s);
     cout<<"Title: ";
     getline(cin,title);
     transform(title.begin(),title.end(),title.begin(),::tolower);
 
     auto it = library.find(title);  
-     
+    //bool setLoanState(bool x){loan_state = x;} 
+
     if ( it == library.end() ) {  
     // not found  
      cout<<"We don't own that book.";  
     }   
     else {  
-        //If it's found -> see if it's availabe for loanment
-        if(library[title].getLoanState())
+        //If it's found -> see if it's been returned
+        if(library[title].getLoanState()) //true --> not yet returned
         {
-            cout<<"The book it's not available at the moment"<<endl;
-            borrowBook();
+            cout<<"Thank you for returning the book"<<endl;
+            x = false;
+            library[title].setLoanState(x); //It's now at the library
         }  
-        else{
-            cout<<"The book is available for loan"<<endl;
+        else{ //false --> it's at the library
+            cout<<"The book has already been returned."<<endl;
+            
         }
         
     }  
@@ -344,10 +487,9 @@ int main()
     getch();
     return 0;
 }
-//o ver que se pueda poner la primer palabra --> puse todo el titulo 
-//tambien moverle al cin para que agarre toda la linea, para el título y autor
-//hacer las distinciones de los tipos de libro a la hora de añadirlos a la lista
-//agregar lo del documento a los estudiantes, y el registro de prestamos a los libros
+
+
+
+
 //revisar como rayos usar los hilos
 
-//Agregar eliminar
