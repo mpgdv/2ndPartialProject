@@ -37,24 +37,48 @@ class Book{
 class Novel: public Book{ 
     private:
         string genre;
+        fstream registration; //Loan registration
     public:
         Novel():genre(""){};
         Novel(string title,string author,int year_publication,string _genre):Book(title,author,year_publication){
             genre = _genre;
-        } //un string para el nombre
-        //void comer();
-        //void SetBirthday(int,int,int);
+
+            registration.open(title,ios::out);
+            if(!registration)
+            {
+                cout<<"Error in creating file!";
+            }
+            registration<<"Title: "<<title<<endl<<"Author: "<<author<<endl;
+            registration<<"Year of puplication: "<<year_publication<<endl<<"Genre: "<<genre<<endl;
+            registration<<endl<<endl<<"Loan Registration: "<<endl<<endl;
+
+            registration.close();
+        } 
+        
+        
 };
 
 class TextBook: public Book{ 
     private:
         string subject;
         string topic;
+        fstream registration;
     public:
         TextBook():subject(""),topic(""){};
         TextBook(string title,string author,int year_publication,string _subject,string _topic):Book(title,author,year_publication){
             subject = _subject;
             topic = _topic;
+
+            registration.open(title,ios::out);
+            if(!registration)
+            {
+                cout<<"Error in creating file!";
+            }
+            registration<<"Title: "<<title<<endl<<"Author: "<<author<<endl;
+            registration<<"Year of puplication: "<<year_publication<<endl<<"Subject: "<<subject<<endl<<"Topic: "<<topic<<endl;
+            registration<<endl<<endl<<"Loan Registration: "<<endl<<endl;
+
+            registration.close();
         } 
 };
 
@@ -62,10 +86,22 @@ class Comic: public Book{
     private:
         int volume; 
         string artist;
+        fstream registration;
     public:
         Comic():volume(0),artist(""){};
         Comic(string title,string author,int year_publication,int _volume,string _artist):Book(title,author,year_publication){
             volume = _volume;
             artist = _artist;
+
+            registration.open(title,ios::out);
+            if(!registration)
+            {
+                cout<<"Error in creating file!";
+            }
+            registration<<"Title: "<<title<<endl<<"Author: "<<author<<endl<<"Artist: "<<artist<<endl;
+            registration<<"Year of puplication: "<<year_publication<<endl<<"Volume: "<<endl;
+            registration<<endl<<endl<<"Loan Registration: "<<endl<<endl;
+
+            registration.close();
         } 
 };
