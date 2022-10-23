@@ -48,13 +48,12 @@ class Novel: public Book{
             {
                 cout<<"Error in creating file!";
             }
-            registration<<"Title: "<<title<<endl<<"Author: "<<author<<endl;
+            registration<<endl<<"Title: "<<title<<endl<<"Author: "<<author<<endl;
             registration<<"Year of puplication: "<<year_publication<<endl<<"Genre: "<<genre<<endl;
-            registration<<endl<<endl<<"Loan Registration: "<<endl<<endl;
+            registration<<endl<<endl<<"Loan Registration: "<<endl;
 
             registration.close();
         } 
-        
         
 };
 
@@ -74,7 +73,7 @@ class TextBook: public Book{
             {
                 cout<<"Error in creating file!";
             }
-            registration<<"Title: "<<title<<endl<<"Author: "<<author<<endl;
+            registration<<endl<<"Title: "<<title<<endl<<"Author: "<<author<<endl;
             registration<<"Year of puplication: "<<year_publication<<endl<<"Subject: "<<subject<<endl<<"Topic: "<<topic<<endl;
             registration<<endl<<endl<<"Loan Registration: "<<endl<<endl;
 
@@ -98,7 +97,7 @@ class Comic: public Book{
             {
                 cout<<"Error in creating file!";
             }
-            registration<<"Title: "<<title<<endl<<"Author: "<<author<<endl<<"Artist: "<<artist<<endl;
+            registration<<endl<<"Title: "<<title<<endl<<"Author: "<<author<<endl<<"Artist: "<<artist<<endl;
             registration<<"Year of puplication: "<<year_publication<<endl<<"Volume: "<<endl;
             registration<<endl<<endl<<"Loan Registration: "<<endl<<endl;
 
