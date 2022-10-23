@@ -28,7 +28,8 @@ class Library{
     void student();
     void librarian();
     void booklist(int);
-    void see(int);
+    void see();
+    void borrowBook();
 
 };
 
@@ -55,7 +56,7 @@ void Library::get()
             cout<<"\n\t\tPlease enter correct option :(";
             getch();
             system("CLS");
-           get();
+            get();
         }
 }
 void Library::student()
@@ -63,10 +64,10 @@ void Library::student()
     int i;
         cout<<"\n\t************ WELCOME STUDENT ************\n";
         cout<<"\n\t\t>>Please Choose One Option:\n";
-        cout<<"\n\t\t1.View BookList\n\n\t\t2.Search for a Book\n\n\t\t3.Go to main menu\n\n\t\t4.Close Program\n";
+        cout<<"\n\t\t1.View BookList\n\n\t\t2. Borrow a Book\n\n\t\t3.Go to main menu\n\n\t\t4.Close Program\n";
         cout<<"\n\t\tEnter your choice : ";
         cin>>i;
-            if(i==1)
+            /*if(i==1)
                 booklist(1);
             else if(i==2)
                 see(1);
@@ -83,7 +84,25 @@ void Library::student()
                 getch();
                 system("cls");
                 student();
-            }
+            }*/
+
+         
+
+        switch(i)
+        {
+            case 1:booklist(1);
+                     break;
+            case 2:borrowBook(); //Change to borrow
+                     break;
+            case 3:system("cls");
+                     get();
+                     break;
+            case 4:exit(0);
+            default:cout<<"\n\t\tPlease enter correct option :(";
+            getch();
+            system("cls");
+            student();
+        }
 }
 void Library::booklist(int i)
 {
@@ -104,14 +123,14 @@ void Library::booklist(int i)
                 else
                     librarian();
 }
-void Library::see(int x){
+void Library::see(){ //To see a book register
     
     cout<<"\n\t\t Search: Press any key to continue.....";
     getch();
     system("cls");
-    if(x==1)
+   /* if(x==1)
     student();
-    else
+    else*/
     librarian();
 }
 void Library::librarian()
@@ -126,7 +145,7 @@ void Library::librarian()
         {
             case 1:booklist(2);
                      break;
-            case 2:see(2);
+            case 2:see(); //This search would be to see a book register
                      break;
             case 3:addBook();
                      break;
@@ -157,6 +176,8 @@ void Library::addBook(){
         cout<<"\n\t\t1.Add Novel\n\n\t\t2.Add Textbook\n\n\t\t3.Add Comic\n\n\t\t4.Return\n";
         cout<<"\n\t\tEnter your choice : ";
         cin>>i;
+       
+       map<string,Book>::iterator it;
 
         switch(i)
         {   
@@ -166,56 +187,88 @@ void Library::addBook(){
                 getline(cin,s);
                 cout<<"Title: "; 
                 getline(cin,title);
-                cout<<"Author: ";
-                getline(cin,author);
-                cout<<"Publication year: "; 
-                cin>>year;
-                getline(cin,s);
-                cout<<"Genre: ";
-                getline(cin,genre);
-                key = title;
+                
+                key = title; //la llave será el título en mínusculas
                 transform(key.begin(),key.end(),key.begin(),::tolower);
-                library[key] = Novel(title,author,year,genre);
-                    //la llave será el título en mínusculas
-                     break;
+
+                it = library.find(key); 
+                if ( it == library.end() ) {  
+                // if it's not at the library
+                    cout<<"Author: ";
+                    getline(cin,author);
+                    cout<<"Publication year: "; 
+                    cin>>year;
+                    getline(cin,s);
+                    cout<<"Genre: ";
+                    getline(cin,genre);
+                    library[key] = Novel(title,author,year,genre);
+                }   
+                else {  
+                    //found  
+                    cout << "That novel it's already at the library";  
+                }  
+                break;
             //Textbook
             case 2:
                 getline(cin,s);
                 cout<<"Title: "; 
                 getline(cin,title);
-                cout<<"Author: ";
-                getline(cin,author);
-                cout<<"Publication year: "; 
-                cin>>year;
-                getline(cin,s);
-                cout<<"Subject: ";
-                getline(cin,subject);
-                cout<<"Topic: ";
-                getline(cin,topic);
-
-                key = title;
+                
+                key = title; //la llave será el título en mínusculas
                 transform(key.begin(),key.end(),key.begin(),::tolower);
-                library[key] = TextBook(title,author,year,subject,topic);
-                     break;
+
+                it = library.find(key); 
+                if ( it == library.end() ) {  
+                // if it's not at the library
+                    cout<<"Author: ";
+                    getline(cin,author);
+                    cout<<"Publication year: "; 
+                    cin>>year;
+                    getline(cin,s);
+                    cout<<"Subject: ";
+                    getline(cin,subject);
+                    cout<<"Topic: ";
+                    getline(cin,topic);
+
+                    library[key] = TextBook(title,author,year,subject,topic);
+                    
+                }   
+                else {  
+                    //found  
+                    cout << "That textbook it's already at the library";  
+                }  
+                break;
+              
             //Comic
             case 3:
                 getline(cin,s);
                 cout<<"Title: "; 
                 getline(cin,title);
-                cout<<"Author: ";
-                getline(cin,author);
-                cout<<"Publication year: ";
-                cin>>year;
-                cout<<"Volume: ";
-                cin>>volume;
-                getline(cin,s);
-                cout<<"Artisti: ";
-                getline(cin,artist);
-
-                key = title;
+                
+                key = title; //la llave será el título en mínusculas
                 transform(key.begin(),key.end(),key.begin(),::tolower);
-                library[key] = Comic(title,author,year,volume,artist);
-                     break;
+
+                it = library.find(key); 
+                if ( it == library.end() ) {  
+                // if it's not at the library
+                    cout<<"Author: ";
+                    getline(cin,author);
+                    cout<<"Publication year: "; 
+                    cin>>year;
+                    getline(cin,s);
+                    cout<<"Volume: ";
+                    cin>>volume;
+                    getline(cin,s);
+                    cout<<"Artisti: ";
+                    getline(cin,artist);
+
+                    library[key] = Comic(title,author,year,volume,artist); 
+                }   
+                else {  
+                    //found  
+                    cout << "That textbook it's already at the library";  
+                }  
+                break;
             case 4:
                 librarian();
                 break;
@@ -256,7 +309,39 @@ void Library::deleteBook(){
         librarian();
 
 }
+void Library::borrowBook(){
+    
+    string title,s;
+    cout<<"Please enter the title of the book to borrow"<<endl;
+    getline(cin,s);
+    cout<<"Title: ";
+    getline(cin,title);
+    transform(title.begin(),title.end(),title.begin(),::tolower);
 
+    auto it = library.find(title);  
+     
+    if ( it == library.end() ) {  
+    // not found  
+     cout<<"We don't own that book.";  
+    }   
+    else {  
+        // found  
+        cout << "Book found";  
+    }  
+
+    /*if(!library.erase(title))
+    {
+        cout<<"We don't have that book at the library"<<endl;
+    }
+    else{
+        cout<<"It's been deleted"<<endl;
+    }*/
+
+    cout<<"\n\t\tPress any key to continue.....";
+        getch();
+        system("cls");
+        student();
+}
 int main()
 {
     Library obj;
