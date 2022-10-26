@@ -30,7 +30,8 @@ void *countDown(void *arg){
     for(int i = n; i> 0; i--)
     {
        // cout<<i<<endl;
-        sleep(2);//sleeps for 2 seconds
+        sleep(10);//sleeps for 10 seconds
+                 //every 10 seconds is one day
     }
     
     *a->second= false; 
@@ -56,7 +57,6 @@ class Library{
     void booklist(int);
     void seeRegistration();
     void borrowBook();
-    void returnBook();
     void deleteFiles(); //When the program closes
 
 };
@@ -92,7 +92,7 @@ void Library::student()
     int i;
         cout<<"\n\t************ WELCOME STUDENT ************\n";
         cout<<"\n\t\t>>Please Choose One Option:\n";
-        cout<<"\n\t\t1.View BookList\n\n\t\t2. Books available for loan\n\n\t\t3. Borrow a Book\n\n\t\t4. Return a Book\n\n\t\t5.Go to main menu\n\n\t\t6.Close Program\n";
+        cout<<"\n\t\t1.View BookList\n\n\t\t2. Books available for loan\n\n\t\t3. Borrow a Book\n\n\t\t4.Go to main menu\n\n\t\t5.Close Program\n";
         cout<<"\n\t\tEnter your choice : ";
         cin>>i;
             
@@ -107,12 +107,10 @@ void Library::student()
                      break;
             case 3:borrowBook(); //Change to borrow
                      break;
-            case 4:returnBook();
-                     break;
-            case 5:system("cls");
+            case 4:system("cls");
                      get();
                      break;
-            case 6:deleteFiles();
+            case 5:deleteFiles();
             default:cout<<"\n\t\tPlease enter correct option :(";
             getch();
             system("cls");
@@ -454,46 +452,6 @@ void Library::borrowBook(){
     }
     //Ask for how many days
     
-
-    cout<<"\n\t\tPress any key to continue.....";
-        getch();
-        system("cls");
-        student();
-}
-
-void Library::returnBook(){
-    //If it's not the limit yet -> Returned on time
-    //If it's past the limit day -> not returned on time
-    
-    string title,s;
-    bool x;
-    cout<<"Please enter the title of the book to return"<<endl;
-    getline(cin,s);
-    cout<<"Title: ";
-    getline(cin,title);
-    transform(title.begin(),title.end(),title.begin(),::tolower);
-
-    auto it = library.find(title);  
-    //bool setLoanState(bool x){loan_state = x;} 
-
-    if ( it == library.end() ) {  
-    // not found  
-     cout<<"We don't own that book.";  
-    }   
-    else {  
-        //If it's found -> see if it's been returned
-        if(library[title].getLoanState()) //true --> not yet returned
-        {
-            cout<<"Thank you for returning the book"<<endl;
-            x = false;
-            library[title].setLoanState(x); //It's now at the library
-        }  
-        else{ //false --> it's at the library
-            cout<<"The book has already been returned."<<endl;
-            
-        }
-        
-    }  
 
     cout<<"\n\t\tPress any key to continue.....";
         getch();
