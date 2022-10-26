@@ -6,6 +6,11 @@
 #include<conio.h>
 #include<map>
 #include"Book.h"
+#include<pthread.h>
+#include <windows.h>
+#include<unistd.h>
+
+
 
 using namespace std;
 
@@ -14,6 +19,29 @@ using namespace std;
 //y vaya disminuyendo. Para q cuando se quiera volver a rentar, ya no se pueda
 //Entoncces el hilo será por tiempo
 //no se, si el hilo existe no se puede rentar -> decir cuantos días faltan para q se rente
+
+//For the Thread
+void *countDown(void *arg){
+    //int *n = (int *)arg;
+    //struct thread_arguments* a = (struct thread_arguments *)arg;
+    
+    
+    pair<int,bool*>* a = (pair<int,bool*> *)arg;
+    int n = a->first;
+    
+    
+    for(int i = n; i> 0; i--)
+    {
+       // cout<<i<<endl;
+        sleep(2);//sleeps for 2 seconds
+    }
+    
+    *a->second= false; 
+     pthread_exit(NULL);
+}
+
+
+
 class Library{
 
     public:
@@ -398,8 +426,22 @@ void Library::borrowBook(){
                     cout<<"Enter the number of days you wish to borrow the book: "<<endl;
                     cin>>days;
 
-                    //Register the loanment on the file
+                   
 
+            //Threads
+                    library[title].setLoanState(true); //it's been lent
+                    
+                    //Thread: once it finishes it will return the loanstate to false
+                    
+                    pthread_t loan;
+
+                    pair<int,bool*> p = library[title].getPair(days);
+                    
+
+                    pthread_create(&loan,NULL,&countDown,&p);
+
+
+                    //Register the loanment on the file
                     fstream f;
                     f.open(library[title].getTitle(), ios::app);
                     if (!f)
@@ -409,11 +451,6 @@ void Library::borrowBook(){
                         f.close();
                     }
 
-
-                    
-                    //Add threads
-                    bool x = true;
-                    library[title].setLoanState(x);
                 }
         
             }  

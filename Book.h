@@ -32,6 +32,14 @@ class Book{
         void print_book(){
             cout<<"\""<<title<<"\" by "<<author<<endl;
         }
+        pair<int,bool*> getPair(int x) //this is for the thread
+        {
+            pair<int,bool*> p;
+            p.first = x;
+            p.second = &loan_state;
+
+            return p;
+        }
 
 };
 class Novel: public Book{ 
