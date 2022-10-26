@@ -22,9 +22,6 @@ using namespace std;
 
 //For the Thread
 void *countDown(void *arg){
-    //int *n = (int *)arg;
-    //struct thread_arguments* a = (struct thread_arguments *)arg;
-    
     
     pair<int,bool*>* a = (pair<int,bool*> *)arg;
     int n = a->first;
@@ -527,6 +524,4 @@ int main()
 
 
 
-
-//revisar como rayos usar los hilos
 
