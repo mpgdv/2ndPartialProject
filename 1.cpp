@@ -373,7 +373,7 @@ void Library::deleteBook(){
     }
     else{
         cout<<"It's been deleted"<<endl;
-        int x = remove(title.c_str());
+        int x = remove(title.c_str()); //deleting file
     }
 
     cout<<"\n\t\tPress any key to continue.....";
