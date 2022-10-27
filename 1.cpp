@@ -14,13 +14,10 @@
 
 using namespace std;
 
-//A cada libro agregarle un hilo cuando se  rente, 
-//este será para el tiempo. Y por ejemplo q sean 5 seg por día, 
-//y vaya disminuyendo. Para q cuando se quiera volver a rentar, ya no se pueda
-//Entoncces el hilo será por tiempo
-//no se, si el hilo existe no se puede rentar -> decir cuantos días faltan para q se rente
 
-//For the Thread
+
+
+//Function for the Thread
 void *countDown(void *arg){
     
     pair<int,bool*>* a = (pair<int,bool*> *)arg;
@@ -29,12 +26,11 @@ void *countDown(void *arg){
     
     for(int i = n; i> 0; i--)
     {
-       // cout<<i<<endl;
         sleep(10);//sleeps for 10 seconds
                  //every 10 seconds is one day
     }
     
-    *a->second= false; 
+    *a->second= false; //Change the book loan state to false -> it's been returned
      pthread_exit(NULL);
 }
 
@@ -44,9 +40,8 @@ class Library{
 
     public:
     map<string,Book> library;
-    Library(){
-           
-    }
+
+    Library(){ }
 
     void get();
     void addBook();
@@ -87,131 +82,8 @@ void Library::get()
             get();
         } 
 }
-void Library::student()
-{
-    int i;
-        cout<<"\n\t************ WELCOME STUDENT ************\n";
-        cout<<"\n\t\t>>Please Choose One Option:\n";
-        cout<<"\n\t\t1.View BookList\n\n\t\t2. Books available for loan\n\n\t\t3. Borrow a Book\n\n\t\t4.Go to main menu\n\n\t\t5.Close Program\n";
-        cout<<"\n\t\tEnter your choice : ";
-        cin>>i;
-            
 
-         
-
-        switch(i)
-        {
-            case 1:booklist(1);
-                     break;
-            case 2:booksAvailable();
-                     break;
-            case 3:borrowBook(); //Change to borrow
-                     break;
-            case 4:system("cls");
-                     get();
-                     break;
-            case 5:deleteFiles();
-            default:cout<<"\n\t\tPlease enter correct option :(";
-            getch();
-            system("cls");
-            student();
-        }
-}
-
-//Books Available at the moment
-void Library::booksAvailable(){
-    
-    int i = 0;
-    for(map<string,Book>::iterator it = library.begin();it!=library.end();it++){
-
-        pair<string,Book> book = *it;
-       
-       if(!book.second.getLoanState())
-       {
-            i++;
-            book.second.print_book(); //Print the books available at the library
-       }
-        
-    }
-
-    if(i == 0)
-    {
-        cout<<"There are no books available at the library, come another time"<<endl;
-    }
-
-    cout<<"\n\t\tPress any key to continue.....";
-    getch();
-    system("cls");
-    student();
-}
-//All the books the library has
-void Library::booklist(int i)
-{
-    //just to see the menus
-
-    if(library.empty())
-    {
-        cout<<"There are no books yet at the library"<<endl;
-    }
-    //Revisar si le voy a tener q mover a este
-      for(map<string,Book>::iterator it = library.begin();it!=library.end();it++){
-
-        pair<string,Book> book = *it;
-       
-        book.second.print_book(); //Se usa el el metodo de la clase persona, ya que es un objeto
-    }
-    cout<<"\n\t\tPress any key to continue.....";
-    getch();
-    system("cls");
-    if(i==1)
-        student();
-    else
-        librarian();
-}
-void Library::seeRegistration(){ //To see a book register
-    
-    string title,s;
-    cout<<"Please enter the title of the book"<<endl;
-    getline(cin,s);
-    cout<<"Title: ";
-    getline(cin,title);
-    transform(title.begin(),title.end(),title.begin(),::tolower);
-
-    auto it = library.find(title);  
-
-    if ( it == library.end() ) {  
-    // not found  
-     cout<<"We don't own that book.";  
-    }   
-    else {  
-        ifstream f;
-        string text;
-
-        f.open(library[title].getTitle(),ios::in);
-
-        if(f.fail()) //Para ver si el archivo se creo
-        {
-            cout<<"El archivo no se puede abrir"<<endl;
-        }
-
-        while(!f.eof()) //leer hasta que llegue al fin
-        {
-            getline(f,text); //lee del archivo, se guarda en 
-            cout<<text<<endl;
-        }
-        
-        f.close(); 
-    }  
-
-
-    cout<<"\n\t\t Search: Press any key to continue.....";
-    getch();
-    system("cls");
-   
-    librarian();
-}
-
-
+//Menu for librarian
 void Library::librarian()
 {
     int i;
@@ -240,11 +112,132 @@ void Library::librarian()
             librarian();
         }
 }
+//Menu for student
+void Library::student()
+{
+    int i;
+        cout<<"\n\t************ WELCOME STUDENT ************\n";
+        cout<<"\n\t\t>>Please Choose One Option:\n";
+        cout<<"\n\t\t1.View BookList\n\n\t\t2. Books available for loan\n\n\t\t3. Borrow a Book\n\n\t\t4.Go to main menu\n\n\t\t5.Close Program\n";
+        cout<<"\n\t\tEnter your choice : ";
+        cin>>i;
+            
 
-//Moverle para que dependa del tipo de libro
-//Que la llave sea el título completo en minúsculas
+        switch(i)
+        {
+            case 1:booklist(1); //See the books the library owns
+                     break;
+            case 2:booksAvailable(); //See only the books available for loan
+                     break;
+            case 3:borrowBook(); //Borrow book -> this will use threads
+                     break;
+            case 4:system("cls");
+                     get();
+                     break;
+            case 5:deleteFiles(); //The Program closes
+            default:cout<<"\n\t\tPlease enter correct option :(";
+            getch();
+            system("cls");
+            student();
+        }
+}
 
-//Agregar delete
+//Books Available at the moment
+void Library::booksAvailable(){
+    
+    int i = 0;
+
+    for(map<string,Book>::iterator it = library.begin();it!=library.end();it++){
+
+        pair<string,Book> book = *it;
+       
+       if(!book.second.getLoanState())
+       {
+            i++;
+            book.second.print_book(); //Print the books available at the library
+       }
+        
+    }
+
+    if(i == 0)
+    {
+        cout<<"There are no books available at the library, come another time"<<endl;
+    }
+
+    cout<<"\n\t\tPress any key to continue.....";
+    getch();
+    system("cls");
+    student();
+}
+//All the books the library has
+void Library::booklist(int i)
+{
+    
+
+    if(library.empty())//If there are no books added yet
+    {
+        cout<<"There are no books yet"<<endl;
+    }
+    
+    //Print books
+    for(map<string,Book>::iterator it = library.begin();it!=library.end();it++){
+
+        pair<string,Book> book = *it;
+        book.second.print_book(); 
+    }
+    cout<<"\n\t\tPress any key to continue.....";
+    getch();
+    system("cls");
+    if(i==1) 
+        student();
+    else
+        librarian();
+}
+
+//To see a book loan registration
+void Library::seeRegistration(){ 
+    
+    string title,s;
+    cout<<"Please enter the title of the book"<<endl;
+    getline(cin,s);
+    cout<<"Title: ";
+    getline(cin,title);
+    transform(title.begin(),title.end(),title.begin(),::tolower); //The key is in lower case
+
+    auto it = library.find(title);  
+
+    if ( it == library.end() ) {  
+    // not found  
+     cout<<"We don't own that book.";  
+    }   
+    else {  
+        ifstream f;
+        string text;
+
+        f.open(library[title].getTitle(),ios::in);
+
+        if(f.fail()) 
+        {
+            cout<<"The file could not open"<<endl;
+        }
+
+        while(!f.eof()) //Print file
+        {
+            getline(f,text);  
+            cout<<text<<endl;
+        }
+        
+        f.close(); 
+    }  
+
+
+    cout<<"\n\t\t Search: Press any key to continue.....";
+    getch();
+    system("cls");
+    //go back to the librarian menu
+    librarian();
+}
+
 void Library::addBook(){
     
         string title,author,genre,subject, topic,artist,s,key;
@@ -267,7 +260,7 @@ void Library::addBook(){
                 cout<<"Title: "; 
                 getline(cin,title);
                 
-                key = title; //la llave será el título en mínusculas
+                key = title; //Key in lower case
                 transform(key.begin(),key.end(),key.begin(),::tolower);
 
                 it = library.find(key); 
@@ -293,7 +286,7 @@ void Library::addBook(){
                 cout<<"Title: "; 
                 getline(cin,title);
                 
-                key = title; //la llave será el título en mínusculas
+                key = title; 
                 transform(key.begin(),key.end(),key.begin(),::tolower);
 
                 it = library.find(key); 
@@ -363,7 +356,6 @@ void Library::addBook(){
         librarian();
 
 }
-
 void Library::deleteBook(){
     
     string title,s;
