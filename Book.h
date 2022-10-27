@@ -1,9 +1,6 @@
 //Clase libros
 
-//#include<iostream>
-//#include<string>
 #include<bits/stdc++.h>
-//Map -> trabaja con pares -> llave, valor
 
 using namespace std;
 
