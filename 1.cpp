@@ -88,6 +88,7 @@ void Library::get()
 //Menu for librarian
 void Library::librarian()
 {
+    system("cls");
     int i;
         cout<<"\n\t************ WELCOME LIBRARIAN ************\n";
         cout<<"\n\t\t>>Please Choose One Option:\n";
@@ -98,9 +99,11 @@ void Library::librarian()
         {
             case 1:booklist(2);
                      break;
-            case 2:seeRegistration(); //This search would be to see a book register
+            case 2:  system("cls");
+                     seeRegistration(); //This search would be to see a book register
                      break;
-            case 3:addBook();
+            case 3: system("cls");
+                    addBook();
                      break;
             case 4:deleteBook();
                     break;
