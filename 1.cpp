@@ -70,8 +70,10 @@ void Library::get()
             student();
         }
         else if(i==2)
+        {
+            system("cls");
             librarian();
-
+        }
         else if(i==3)
             deleteFiles();
         else
@@ -371,6 +373,7 @@ void Library::deleteBook(){
     }
     else{
         cout<<"It's been deleted"<<endl;
+        int x = remove(title.c_str());
     }
 
     cout<<"\n\t\tPress any key to continue.....";
@@ -434,7 +437,15 @@ void Library::borrowBook(){
                     if (!f)
                         cout << "No such file found";
                     else {
-                        f <<endl<< "Lent for "<<days<<" days.";
+                        
+                        if(days > 1)
+                        {
+                            f <<endl<< " - Lent for "<<days<<" days";
+                        }
+                        else if(days == 1)
+                        {
+                            f <<endl<< " - Lent for 1 day";
+                        }
                         f.close();
                     }
 
